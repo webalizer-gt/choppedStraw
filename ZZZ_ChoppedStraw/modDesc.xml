@@ -13,7 +13,6 @@
     <iconFilename>ChoppedStraw.dds</iconFilename>
     <multiplayer supported="true"/>
     <extraSourceFiles>
-        <sourceFile filename="global.lua" />
 		<sourceFile filename="register.lua" />
     </extraSourceFiles>
 </modDesc>
