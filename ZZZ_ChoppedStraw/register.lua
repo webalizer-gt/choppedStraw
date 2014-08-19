@@ -15,18 +15,43 @@ table.insert(getfenv(0)["modSoilModPlugins"], ChoppedStraw_Register)
 ChoppedStraw_Register.initialized = false
 ChoppedStraw_Register.soilModPresent = false
 --
+ChoppedStraw_Register.csTYPE_UNKNOWN    = 0
+ChoppedStraw_Register.csTYPE_PLOUGH     = 2^0
+ChoppedStraw_Register.csTYPE_CULTIVATOR = 2^1
+ChoppedStraw_Register.csTYPE_SEEDER     = 2^2
+
+
+function ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, isForced, implementType)
+    -- Increase fertilizer(organic)...
+    setDensityMaskParams(         g_currentMission.fmcFoliageFertilizerOrganic, "greater", 0);
+    -- ..where there's choppedStraw / choppedMaize / choppedRape, by 1.
+    addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedStrawId, 0, 2, 1);
+    addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 2, 1);
+		addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedRapeId, 0, 2, 1);
+
+    -- Decrease soil pH where there's choppedStraw / choppedMaize / choppedRape, by 1 - we're cultivating/plouging it into ground.
+    setDensityMaskParams(g_currentMission.fmcFoliageSoil_pH, "greater", 0)
+    addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedStrawId, 0, 2, -- mask
+                        -1  -- decrease
+                    );
+		addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 2, -- mask
+												-1  -- decrease
+										);
+		addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedRapeId, 0, 2, -- mask
+												-1  -- decrease
+										);
+    setDensityMaskParams(g_currentMission.fmcFoliageSoil_pH, "greater", -1)
+
+		-- Remove the choppedStraw / choppedMaize / choppedRape we've just cultivated/ploughed into ground.
+    setDensityParallelogram(ChoppedStraw_Register.foliageChoppedStrawId, sx,sz,wx,wz,hx,hz, 0, 1, 0)
+    setDensityParallelogram(ChoppedStraw_Register.foliageChoppedMaizeId, sx,sz,wx,wz,hx,hz, 0, 1, 0)
+    setDensityParallelogram(ChoppedStraw_Register.foliageChoppedRapeId,   sx,sz,wx,wz,hx,hz, 0, 1, 0)
+end;
+
 function ChoppedStraw_Register.soilModPluginCallback(soilMod)
+
 	-- Mark that SoilMod has "called us"
-	ChoppedStraw_Register.soilModPresent = true
-	if g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDSTRAW] then
-		soilMod.addDestructibleFoliageId(g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDSTRAW].preparingOutputId)
-	end;
-	if g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDMAIZE] then
-		soilMod.addDestructibleFoliageId(g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDMAIZE].preparingOutputId)
-	end;
-	if g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDRAPE] then
-		soilMod.addDestructibleFoliageId(g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDRAPE].preparingOutputId)
-	end;
+	ChoppedStraw_Register.soilModPresent = true;
 
 	-- Helper function, to extract the foliage-layer-id if available
 	local function getFruitFoliageLayerId(fruitId)
@@ -37,41 +62,49 @@ function ChoppedStraw_Register.soilModPluginCallback(soilMod)
 		end;
 		return nil;
 	end;
+	-- Helper function, to determine if foliageId is valid
+	local function hasFoliageLayer(foliageId)
+		return (foliageId ~= nil and foliageId ~= 0);
+	end;
 
-	-- Only add plugin for fruit-type, if fruit-type exists and has foliage-layer
+	-- Get the foliage-id values for choppedStraw, choppedMaize, choppedRape.
 	if getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDSTRAW) ~= nil then
-		local layerId = getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDSTRAW);
-		local numChannels = getTerrainDetailNumChannels(layerId);
-
-		soilMod.addPlugin_UpdateSowingArea_before(
-		"Remove chopped straw",
-		31,
-		function(sx,sz,wx,wz,hx,hz,dataStore)
-			setDensityParallelogram(layerId, sx,sz,wx,wz,hx,hz, 0, numChannels, 0)
-		end
-		)
+		ChoppedStraw_Register.foliageChoppedStrawId = getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDSTRAW);
 	end;
 	if getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDMAIZE) ~= nil then
-		local layerId = getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDMAIZE);
-		local numChannels = getTerrainDetailNumChannels(layerId);
-		soilMod.addPlugin_UpdateSowingArea_before(
-		"Remove chopped maize",
-		32,
-		function(sx,sz,wx,wz,hx,hz,dataStore)
-			setDensityParallelogram(layerId, sx,sz,wx,wz,hx,hz, 0, numChannels, 0)
-		end
-		)
+		ChoppedStraw_Register.foliageChoppedMaizeId = getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDMAIZE);
 	end;
 	if getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDRAPE) ~= nil then
-		local layerId = getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDRAPE);
-		local numChannels = getTerrainDetailNumChannels(layerId);
+		ChoppedStraw_Register.foliageChoppedRapeId = getFruitFoliageLayerId(FruitUtil.FRUITTYPE_CHOPPEDRAPE);
+	end;
+
+	-- Only add plugin for fruit-type, if fruit-type exists and has foliage-layer
+  if hasFoliageLayer(ChoppedStraw_Register.foliageChoppedStrawId) and hasFoliageLayer(ChoppedStraw_Register.foliageChoppedMaizeId) and  hasFoliageLayer(ChoppedStraw_Register.foliageChoppedRapeId) then
+
 		soilMod.addPlugin_UpdateSowingArea_before(
-		"Remove chopped rape",
-		33,
-		function(sx,sz,wx,wz,hx,hz,dataStore)
-			setDensityParallelogram(layerId, sx,sz,wx,wz,hx,hz, 0, numChannels, 0)
+		"Process chopped straw",
+		31,
+    function(sx,sz,wx,wz,hx,hz, dataStore, fruitDesc)
+    	ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, dataStore.forced, ChoppedStraw_Register.csTYPE_SEEDER)
+    end
+		)
+
+		soilMod.addPlugin_UpdateCultivatorArea_before(
+		"Process chopped straw",
+		31,
+		function(sx,sz,wx,wz,hx,hz, dataStore, fruitDesc)
+			ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, dataStore.forced, ChoppedStraw_Register.csTYPE_CULTIVATOR)
 		end
 		)
+
+		soilMod.addPlugin_UpdatePloughArea_before(
+		"Process chopped straw",
+		31,
+		function(sx,sz,wx,wz,hx,hz, dataStore, fruitDesc)
+			ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, dataStore.forced, ChoppedStraw_Register.csTYPE_PLOUGH)
+		end
+		)
+
 	end;
   return true;
 end;
