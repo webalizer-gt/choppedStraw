@@ -1,0 +1,127 @@
+﻿-- Chopped Straw
+-- Spec for chopped straw left on field
+
+
+#######################
+Instructions part 1 of 7:
+
+To prepare your MAP.I3D for use, three blocks of additional elements needs to be added to it:
+  - 4 File assets
+  - 3 Material assets
+  - 1 FoliageMultiLayer containing three FoliageSubLayers
+These blocks are IN THIS file in the next instruction parts.
+
+As always; MAKE A BACKUP ahead of time, in case you later made a mistake or some problems/errors occur which you can't quite figure out. This way you can always revert to your previous backup, and try follow the instructions again.
+Map has to be extracted!
+
+A.  First you need to locate and write down three numbers from your own MAP.I3D file (use the find function of your Textbrowser!):
+
+    A-1. Find the 'fileId' of 'shaders/windrowFoliageShader.xml'. Note the value here->
+    A-2. Find the 'blockShapeId' in 'FoliageSubLayer name="wheat_windrow"'. Note the value here->
+    A-3. Find the 'blockShapeId' in 'FoliageSubLayer name="potato_haulm"'. Note the value here->
+    A-4. Find the LAST number in 'distanceMapIds' of 'FoliageSubLayer name="wheat"'. Note the value here->
+    A-5. Find the LAST number in 'distanceMapIds' of 'FoliageSubLayer name="rape"'. Note the value here->
+    A-6. Find the LAST number in 'distanceMapIds' of 'FoliageSubLayer name="maize"'. Note the value here->
+
+B.  Using the numbers you found in step-A, then in THIS FILE, you have to search/replace some placeholders.
+    Note: When you search/replace, remember to include the two+two exclamation marks surrounding the placeholder-text.
+    - Example: search for  !!PLACEHOLDER!!  then replace with  1234
+
+    B-1. Search for     !!WINDROWSHADERFILEID!!     and replace with the number you found in A-1.
+    B-2. Search for     !!WINDROWBLOCKSHAPEID!!     and replace with the number you found in A-2.
+    B-3. Search for     !!HAULMBLOCKSHAPEID!!       and replace with the number you found in A-3.
+    B-4. Search for     !!WHEATDISTANCEMAPID!!      and replace with the number you found in A-4.
+    B-5. Search for     !!RAPEDISTANCEMAPID!!       and replace with the number you found in A-5.
+    B-6. Search for     !!MAIZEDISTANCEMAPID!!      and replace with the number you found in A-6.
+
+
+#######################
+Instructions part 2 of 7:
+
+Add the following four <File> elements to your own MAP.I3D's <Files> section.
+
+    <!-- choppedStraw files -->
+    <File fileId="99993" filename="choppedStraw/straw_haulm_density.png" relativePath="true"/>
+    <File fileId="99994" filename="choppedStraw/foliage_maize_haulm_diffuse.png" relativePath="true"/>
+    <File fileId="99995" filename="choppedStraw/foliage_rape_haulm_diffuse.png" relativePath="true"/>
+    <File fileId="99996" filename="choppedStraw/foliage_straw_haulm_diffuse.png" relativePath="true"/>
+
+
+#######################
+Instructions part 3 of 7:
+
+Add the following three <Material> elements to your own MAP.I3D's <Materials> section.
+
+    <!-- choppedStraw materials -->
+    <Material name="maizeHaulmMaterial" materialId="99001" ambientColor="1 1 1" customShaderId="!!WINDROWSHADERFILEID!!">
+      <Texture fileId="99994"/>
+      <CustomParameter name="alphaBlendStartEnd" value="70 75 0 0"/>
+    </Material>
+    <Material name="rapeHaulmMaterial" materialId="99002" ambientColor="1 1 1" customShaderId="!!WINDROWSHADERFILEID!!">
+      <Texture fileId="99995"/>
+      <CustomParameter name="alphaBlendStartEnd" value="70 75 0 0"/>
+    </Material>
+    <Material name="strawHaulmMaterial" materialId="99003" ambientColor="1 1 1" customShaderId="!!WINDROWSHADERFILEID!!">
+      <Texture fileId="99996"/>
+      <CustomParameter name="alphaBlendStartEnd" value="70 75 0 0"/>
+    </Material>
+
+
+#######################
+Instructions part 4 of 7:
+
+Add the following <FoliageMultiLayer> and its <FoliageSubLayer>s to your own MAP.I3D. Insert it after the <InfoLayer ... /> element.
+
+    <!-- choppedStraw foliage layers -->
+    <FoliageMultiLayer densityMapId="9993" numChannels="3" numTypeIndexChannels="0">
+      <FoliageSubLayer name="choppedMaize_haulm" densityMapChannelOffset="2" numDensityMapChannels="1" materialId="99001" cellSize="8" viewDistance="80" terrainOffset="0.07" objectMask="65520" distanceMapIds="!!MAIZEDISTANCEMAPID!!" distanceMapUnitSizes="128" repeatLastDistanceMap="true" atlasSize="1" numBlocksPerUnit="1.4" width="1.5" height="1" widthVariance="0" heightVariance="0" horizontalPositionVariance="0.1" blockShapeId="!!HAULMBLOCKSHAPEID!!" useShapeNormals="false" alignWithTerrain="true"/>
+      <FoliageSubLayer name="choppedRape_haulm" densityMapChannelOffset="1" numDensityMapChannels="1" materialId="99002" cellSize="8" viewDistance="80" terrainOffset="0.07" objectMask="65520" distanceMapIds="!!RAPEDISTANCEMAPID!!" distanceMapUnitSizes="128" repeatLastDistanceMap="true" atlasSize="1" numBlocksPerUnit="1.4" width="1.5" height="0.5" widthVariance="0" heightVariance="0" horizontalPositionVariance="0.1" blockShapeId="!!HAULMBLOCKSHAPEID!!" useShapeNormals="false" alignWithTerrain="true"/>
+      <FoliageSubLayer name="choppedStraw_haulm" densityMapChannelOffset="0" numDensityMapChannels="1" materialId="99003" cellSize="8" viewDistance="80" terrainOffset="0.07" objectMask="65520" distanceMapIds="!!WHEATDISTANCEMAPID!!" distanceMapUnitSizes="128" repeatLastDistanceMap="true" atlasSize="1" numBlocksPerUnit="1.4" width="1.5" height="0.5" widthVariance="0" heightVariance="0" horizontalPositionVariance="0.1" blockShapeId="!!WINDROWBLOCKSHAPEID!!" useShapeNormals="false" alignWithTerrain="true"/>
+    </FoliageMultiLayer>
+
+
+#######################
+Instructions part 5 of 7:
+
+Add the following <text> elements to <l10n> of your moddesc.xml.
+
+    <!-- chopped Straw l10n -->
+    <text name="choppedStraw">
+      <en>Chopped Straw</en>
+      <de>Gehäckseltes Stroh</de>
+    </text>
+    <text name="choppedMaize">
+      <en>Chopped maize</en>
+      <de>Gehäckselter Mais</de>
+    </text>
+    <text name="choppedRape">
+      <en>Chopped rape</en>
+      <de>Gehäckselter Raps</de>
+    </text>
+
+
+#######################
+Instructions part 6 of 7:
+
+Add the following <sourceFile> element to <extraSourceFiles> of your moddesc.xml.
+
+    <sourceFile filename="choppedStraw/fruits.lua" />
+
+  If there´s no <extraSourceFiles> part, use the following elements:
+
+    <extraSourceFiles>
+      <sourceFile filename="choppedStraw/fruits.lua" />
+    </extraSourceFiles>
+
+
+#######################
+Instructions part 7 of 7:
+
+Copy the FOLDER 'choppedStraw' to [mapName/map].
+
+Copy the ZIP-FILE 'ZZZ_ChoppedStraw.zip' to your mods folder.
+
+
+#######################
+Finally open the map with Giants Editor. Possible errors are shown in the "Scripting" window. As long as there ARE errors, don´t save the map in Giants Editor. First solve the problems in the text editor.
+If there are no more errors save the map in Giants Editor.

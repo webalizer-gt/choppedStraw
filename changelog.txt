@@ -1,0 +1,23 @@
+﻿20.08.2014
+v1.2.02
+- added plugin-mode for SoilMod
+- more precise map instructions
+
+06.08.2014
+v1.1.03
+- added strawChopper support in ZZZ_ChoppedStraw.zip
+- changed activation of straw to self.combineIsFilling for maize
+
+03.08.2014
+- added log info for registering fruittypes in fruits.lua (Maputils.zip)
+
+02.08.2014
+- merged density maps of FoliageSublayers in Maputils.zip
+
+01.08.2014
+v1.1.02
+- added strawSpec support in ZZZ_ChoppedStraw.zip
+
+31.07.2014
+v1.1.01
+- Initial release
