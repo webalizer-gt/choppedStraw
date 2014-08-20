@@ -1,12 +1,13 @@
 -- Chopped Straw
 -- Spec for chopped straw left on field
--- 06.08.14
+-- by webalizer, www.planet-ls.de
 
 SpecializationUtil.registerSpecialization('ChoppedStraw', 'ChoppedStraw', g_currentModDirectory .. 'ChoppedStraw.lua');
 local choppedStrawSpec = SpecializationUtil.getSpecialization('ChoppedStraw');
 
 ChoppedStraw_Register = {};
-ChoppedStraw_Register.version = "1.2.01"
+local modItem = ModsUtil.findModItemByModName(g_currentModName);
+ChoppedStraw_Register.version = (modItem and modItem.version) and modItem.version or "?.?.?";
 
 -- Register ChoppedStraw for callback from SoilMod's plugin facility
 getfenv(0)["modSoilModPlugins"] = getfenv(0)["modSoilModPlugins"] or {}
@@ -14,7 +15,7 @@ table.insert(getfenv(0)["modSoilModPlugins"], ChoppedStraw_Register)
 --
 ChoppedStraw_Register.initialized = false
 ChoppedStraw_Register.soilModPresent = false
---
+-- Define implements
 ChoppedStraw_Register.csTYPE_UNKNOWN    = 0
 ChoppedStraw_Register.csTYPE_PLOUGH     = 2^0
 ChoppedStraw_Register.csTYPE_CULTIVATOR = 2^1
@@ -23,21 +24,21 @@ ChoppedStraw_Register.csTYPE_SEEDER     = 2^2
 
 function ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, isForced, implementType)
     -- Increase fertilizer(organic)...
-    setDensityMaskParams(         g_currentMission.fmcFoliageFertilizerOrganic, "greater", 0);
+    setDensityMaskParams(g_currentMission.fmcFoliageFertilizerOrganic, "greater", 0);
     -- ..where there's choppedStraw / choppedMaize / choppedRape, by 1.
-    addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedStrawId, 0, 2, 1);
-    addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 2, 1);
-		addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedRapeId, 0, 2, 1);
+    addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedStrawId, 0, 1, 1);
+    addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 1, 1);
+		addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedRapeId, 0, 1, 1);
 
     -- Decrease soil pH where there's choppedStraw / choppedMaize / choppedRape, by 1 - we're cultivating/plouging it into ground.
     setDensityMaskParams(g_currentMission.fmcFoliageSoil_pH, "greater", 0)
-    addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedStrawId, 0, 2, -- mask
+    addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedStrawId, 0, 1, -- mask
                         -1  -- decrease
                     );
-		addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 2, -- mask
+		addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 1, -- mask
 												-1  -- decrease
 										);
-		addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedRapeId, 0, 2, -- mask
+		addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedRapeId, 0, 1, -- mask
 												-1  -- decrease
 										);
     setDensityMaskParams(g_currentMission.fmcFoliageSoil_pH, "greater", -1)

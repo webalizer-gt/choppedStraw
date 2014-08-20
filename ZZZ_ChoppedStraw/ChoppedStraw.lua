@@ -1,7 +1,6 @@
 ﻿-- Chopped Straw
 -- Spec for chopped straw left on field
--- V1.1.03
--- 06.08.14
+-- by webalizer, www.planet-ls.de
 
 ChoppedStraw = {};
 
@@ -14,16 +13,16 @@ function ChoppedStraw:load(xmlFile)
 	self.wwMinMaxAreas = SpecializationUtil.callSpecializationsFunction("self.wwMinMaxAreas");
 	self.createCStrawArea = SpecializationUtil.callSpecializationsFunction("self.createCStrawArea");
 	self.setCStrawArea = SpecializationUtil.callSpecializationsFunction("self.setCStrawArea");
-	
+
 	self.getAreas = ChoppedStraw.getAreas;
 	self.wwMinMaxAreas = ChoppedStraw.wwMinMaxAreas;
 	self.createCStrawArea = ChoppedStraw.createCStrawArea;
 	self.setCStrawArea = ChoppedStraw.setCStrawArea;
-	
+
 	-- Area creation
 	self.strawZOffset = -1;
 	self.strawNodeId = Utils.indexToObject(self.components, getXMLString(xmlFile, "vehicle.strawAreas.strawArea1#startIndex"));
-	
+
 	if self.strawNodeId ~= nil then
 		self.cStrawAreas = {}
 		self.cStrawAreas = self:createCStrawArea();
@@ -61,7 +60,7 @@ function ChoppedStraw:updateTick(dt)
 		if not self.isStrawActive then --or not fruitDesc.hasWindrow then
 			if self.combineIsFilling then
 				local preparingOutputId = nil;
-				
+
 				if g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDSTRAW] and g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDRAPE] and g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDMAIZE] then
 					local fruitDesc = FruitUtil.fruitIndexToDesc[self.lastValidInputFruitType];
 					--print(tostring(fruitDesc.name));
@@ -127,7 +126,7 @@ function ChoppedStraw:getAreas()
 			wwMin,wwMax,wwY,wwZ = self:wwMinMaxAreas(self,oImplement.object.cuttingAreas);
 		end;
 	end;
-	
+
 	local workWidth = math.abs(wwMax-wwMin);
 	local wwCenter = 0;
 	if workWidth > .1 then
@@ -183,7 +182,7 @@ function ChoppedStraw:createCStrawArea()
 		local lx2,ly2,lz2 = worldToLocal(self.rootNode,x2,y2,z2);
 		self.strawXOffset = math.abs(lx2 + lx1)/2;
 	end;
-	
+
 	local cStrawAreas = {};
 
 	local startId1 = createTransformGroup("start1");
@@ -202,7 +201,7 @@ function ChoppedStraw:createCStrawArea()
 	link(self.strawNodeId, widthId2);
 	table.insert(cStrawAreas, {foldMinLimit=0,start=startId2,height=heightId2,foldMaxLimit=0.2,width=widthId2});
 	return cStrawAreas;
-	
+
 end;
 
 function ChoppedStraw:setCStrawArea(caxMin, caxMax)
@@ -210,7 +209,7 @@ function ChoppedStraw:setCStrawArea(caxMin, caxMax)
 	local xMax = caxMax + self.strawXOffset;
 	local center = self.caCenter + self.strawXOffset;
 	local y = self.cay;
-	
+
 	setTranslation(self.cStrawAreas[1].start,xMax,y,self.strawZOffset-2);
 	setTranslation(self.cStrawAreas[1].height,xMax,y,self.strawZOffset-2.5);
 	setTranslation(self.cStrawAreas[1].width,center,y,self.strawZOffset);
