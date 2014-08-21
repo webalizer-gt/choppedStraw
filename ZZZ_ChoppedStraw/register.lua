@@ -30,7 +30,7 @@ function ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, isForced, implem
     addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedMaizeId, 0, 1, 1);
 		addDensityMaskedParallelogram(g_currentMission.fmcFoliageFertilizerOrganic, sx,sz,wx,wz,hx,hz, 0, 2, ChoppedStraw_Register.foliageChoppedRapeId, 0, 1, 1);
 
-    -- Decrease soil pH where there's choppedStraw / choppedMaize / choppedRape, by 1 - we're cultivating/plouging it into ground.
+    -- Decrease soil pH where there's choppedStraw / choppedMaize / choppedRape, by 1 - we're cultivating/plouging/seeding it into ground.
     setDensityMaskParams(g_currentMission.fmcFoliageSoil_pH, "greater", 0)
     addDensityMaskedParallelogram(g_currentMission.fmcFoliageSoil_pH, sx,sz,wx,wz,hx,hz, 0, 3, ChoppedStraw_Register.foliageChoppedStrawId, 0, 1, -- mask
                         -1  -- decrease
@@ -43,7 +43,7 @@ function ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, isForced, implem
 										);
     setDensityMaskParams(g_currentMission.fmcFoliageSoil_pH, "greater", -1)
 
-		-- Remove the choppedStraw / choppedMaize / choppedRape we've just cultivated/ploughed into ground.
+		-- Remove the choppedStraw / choppedMaize / choppedRape we've just cultivated/ploughed/seeded into ground.
     setDensityParallelogram(ChoppedStraw_Register.foliageChoppedStrawId, sx,sz,wx,wz,hx,hz, 0, 1, 0)
     setDensityParallelogram(ChoppedStraw_Register.foliageChoppedMaizeId, sx,sz,wx,wz,hx,hz, 0, 1, 0)
     setDensityParallelogram(ChoppedStraw_Register.foliageChoppedRapeId,   sx,sz,wx,wz,hx,hz, 0, 1, 0)
@@ -86,7 +86,9 @@ function ChoppedStraw_Register.soilModPluginCallback(soilMod)
 		"Process chopped straw",
 		31,
     function(sx,sz,wx,wz,hx,hz, dataStore, fruitDesc)
-    	ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, dataStore.forced, ChoppedStraw_Register.csTYPE_SEEDER)
+      if dataStore.useDirectPlanting then
+    	   ChoppedStraw_Register.updateFoliage(sx,sz,wx,wz,hx,hz, dataStore.forced, ChoppedStraw_Register.csTYPE_SEEDER)
+      end
     end
 		)
 
