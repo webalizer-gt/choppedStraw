@@ -10,8 +10,8 @@ Harvesters with one of the following specializations:
 - strawChopper
 
 ####Optional:
-Soil Management & Growth Control (SoilMod) 1.1.0 by Decker_MMIV - www.fs-uk.com is supported via plugin:
-- Cultivating or ploughing chopped material will raise the organic fertilization level by 1
-- soil pH will decrease by 1 at the same time
+Soil Management & Growth Control (SoilMod) 1.2.0 by Decker_MMIV - www.fs-uk.com is supported via plugin:
+- Processing chopped material with cultivator, plough or direct planting seeders will raise the organic fertilization level by 1
+- soil pH will decrease by 0.7 at the same time
 
 [Visit www.planet-ls.de](http://planet-ls.de/board/index.php?page=Thread&postID=243930#post243930)
