@@ -124,3 +124,17 @@ Kopiere die ZIP-DATEI 'ZZZ_ChoppedStraw.zip' in deinen Mod-Ordner.
 #######################
 Abschließend sollte die Map einmal im Giants Editor geöffnet werden. Im Fenster "Scripting" werden eventuelle Fehler angezeigt. Solange diese vorhanden sind, die Map NICHT im Giants Editor abspeichern. Behebe erst alle Probleme im Texteditor.
 Bei Fehlerfreiheit die Map einmal im Giants Editor abspeichern.
+
+#######################
+Fehlersuche:
+
+Sollte im Spiel kein Stroh erscheinen, ist als erstes die log.txt zu prüfen. Bei korrekt installiertem choppedStraw findet man drei Einträge:
+
+  *** ChoppedStraw fruittypes registered!
+  *** ChoppedStraw v1.2.xx specialization loading ***
+  *** ChoppedStraw added to:
+		  [Liste von Dreschern]
+
+Fehlt der erste Eintrag, wird die fruits.lua nicht gefunden. Prüfe Anleitung Teil 6 & 7!
+Fehlt der zweite Eintrag, stimmt etwas mit ZZZ_ChoppedStraw.zip nicht. Prüfe Anleitung Teil 7!
+Fehlt der dritte Eintrag, ist möglicherweise kein unterstützter Drescher vorhanden.
