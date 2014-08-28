@@ -104,12 +104,12 @@ Anleitung Teil 6 von 7:
 
 Füge den folgenden <sourceFile>-Eintrag im <extraSourceFiles>-Bereich deiner moddesc.xml ein.
 
-    <sourceFile filename="choppedStraw/fruits.lua" />
+    <sourceFile filename="map/choppedStraw/fruits.lua" />
 
   Falls der Bereich <extraSourceFiles> noch nicht vorhanden ist, lautet der Eintrag so:
 
     <extraSourceFiles>
-      <sourceFile filename="choppedStraw/fruits.lua" />
+      <sourceFile filename="map/choppedStraw/fruits.lua" />
     </extraSourceFiles>
 
 
