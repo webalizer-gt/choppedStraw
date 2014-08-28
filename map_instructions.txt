@@ -105,12 +105,12 @@ Instructions part 6 of 7:
 
 Add the following <sourceFile> element to <extraSourceFiles> of your moddesc.xml.
 
-    <sourceFile filename="choppedStraw/fruits.lua" />
+    <sourceFile filename="map/choppedStraw/fruits.lua" />
 
   If there´s no <extraSourceFiles> part, use the following elements:
 
     <extraSourceFiles>
-      <sourceFile filename="choppedStraw/fruits.lua" />
+      <sourceFile filename="map/choppedStraw/fruits.lua" />
     </extraSourceFiles>
 
 
