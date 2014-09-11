@@ -19,6 +19,12 @@ function ChoppedStraw:load(xmlFile)
 	self.createCStrawArea = ChoppedStraw.createCStrawArea;
 	self.setCStrawArea = ChoppedStraw.setCStrawArea;
 
+	if self.chopperToggleTime ~= nil then
+    if self.chopperToggleTime < 4000 then
+      self.chopperToggleTime = 5800;
+    end;
+  end;
+
 	-- Area creation
 	self.strawZOffset = -1;
 	self.strawNodeId = Utils.indexToObject(self.components, getXMLString(xmlFile, "vehicle.strawAreas.strawArea1#startIndex"));
@@ -58,55 +64,48 @@ end;
 function ChoppedStraw:updateTick(dt)
 	if self.strawNodeId ~= nil then
 		if not self.isStrawActive then --or not fruitDesc.hasWindrow then
-			if self.combineIsFilling then
+			--if self.isThreshing then
 				local preparingOutputId = nil;
 
 				if g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDSTRAW] and g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDRAPE] and g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDMAIZE] then
-					local fruitDesc = FruitUtil.fruitIndexToDesc[self.lastValidInputFruitType];
-					--print(tostring(fruitDesc.name));
-
-					if fruitDesc.name == "maize" then
-						preparingOutputId = g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDMAIZE].preparingOutputId;
-						for nIndex,oImplement in pairs(self.attachedImplements) do --parse all implements
-							if oImplement ~= nil and oImplement.object ~= nil then
-								for i = 1, table.getn(oImplement.object.cuttingAreas) do
-									x, y, z = getWorldTranslation(oImplement.object.cuttingAreas[i].start)
-									x1, y1, z1 = getWorldTranslation(oImplement.object.cuttingAreas[i].width)
-									x2, y2, z2 = getWorldTranslation(oImplement.object.cuttingAreas[i].height)
-									Utils.updateStrawHaulmArea(preparingOutputId, x, z, x1, z1, x2, z2)
+					if self.combineIsFilling then
+						local fruitDesc = FruitUtil.fruitIndexToDesc[self.lastValidInputFruitType];
+						if fruitDesc.name == "maize" then
+							preparingOutputId = g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDMAIZE].preparingOutputId;
+							for nIndex,oImplement in pairs(self.attachedImplements) do --parse all implements
+								if oImplement ~= nil and oImplement.object ~= nil then
+									for i = 1, table.getn(oImplement.object.cuttingAreas) do
+										x, y, z = getWorldTranslation(oImplement.object.cuttingAreas[i].start)
+										x1, y1, z1 = getWorldTranslation(oImplement.object.cuttingAreas[i].width)
+										x2, y2, z2 = getWorldTranslation(oImplement.object.cuttingAreas[i].height)
+										Utils.updateStrawHaulmArea(preparingOutputId, x, z, x1, z1, x2, z2)
+									end;
 								end;
 							end;
 						end;
-					elseif fruitDesc.name == "rape" then
-						if self.chopperPSenabled then
+					end;
+					if self.chopperPSenabled then
+						local fruitDesc = FruitUtil.fruitIndexToDesc[self.lastValidInputFruitType];
+						if fruitDesc.name == "rape" then
 							preparingOutputId = g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDRAPE].preparingOutputId;
-							for i = 1, table.getn(self.cStrawAreas) do
-								local x, y, z = getWorldTranslation(self.cStrawAreas[i].start)
-								local x1, y1, z1 = getWorldTranslation(self.cStrawAreas[i].width)
-								local x2, y2, z2 = getWorldTranslation(self.cStrawAreas[i].height)
-								Utils.updateStrawHaulmArea(preparingOutputId, x, z, x1, z1, x2, z2)
-							end;
-						end;
-					else
-						if self.chopperPSenabled then
+						elseif fruitDesc.name ~= "rape" and fruitDesc.name ~= "maize" then
 							preparingOutputId = g_currentMission.fruits[FruitUtil.FRUITTYPE_CHOPPEDSTRAW].preparingOutputId;
-							for i = 1, table.getn(self.cStrawAreas) do
-								local x, y, z = getWorldTranslation(self.cStrawAreas[i].start)
-								local x1, y1, z1 = getWorldTranslation(self.cStrawAreas[i].width)
-								local x2, y2, z2 = getWorldTranslation(self.cStrawAreas[i].height)
-								Utils.updateStrawHaulmArea(preparingOutputId, x, z, x1, z1, x2, z2)
-							end;
 						end;
+            for i = 1, table.getn(self.cStrawAreas) do
+              local x, y, z = getWorldTranslation(self.cStrawAreas[i].start)
+              local x1, y1, z1 = getWorldTranslation(self.cStrawAreas[i].width)
+              local x2, y2, z2 = getWorldTranslation(self.cStrawAreas[i].height)
+              Utils.updateStrawHaulmArea(preparingOutputId, x, z, x1, z1, x2, z2)
+            end;
 					end;
 				end;
-			end;
+			--end;
 		end;
 	end;
 end;
 
 
 function ChoppedStraw:draw()
-
 end;
 
 function ChoppedStraw:attachImplement(implement)
