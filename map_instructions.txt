@@ -23,9 +23,9 @@ A.  First you need to locate and write down three numbers from your own MAP.I3D 
     A-5. Find the LAST number in 'distanceMapIds' of 'FoliageSubLayer name="rape"'. Note the value here->
     A-6. Find the LAST number in 'distanceMapIds' of 'FoliageSubLayer name="maize"'. Note the value here->
 
-B.  Using the numbers you found in step-A, then in THIS FILE, you have to search/replace some placeholders.
+B.  Using the numbers you found in step-A, then in THIS FILE (in which you are reading at the moment), you have to search/replace some placeholders.
     Note: When you search/replace, remember to include the two+two exclamation marks surrounding the placeholder-text.
-    - Example: search for  !!PLACEHOLDER!!  then replace with  1234
+    - Example: search for  !!PLACEHOLDER!!  then replace with  1234 (use the find/replace function of your Textbrowser!)
 
     B-1. Search for     !!WINDROWSHADERFILEID!!     and replace with the number you found in A-1.
     B-2. Search for     !!WINDROWBLOCKSHAPEID!!     and replace with the number you found in A-2.

@@ -23,7 +23,7 @@ A.  Zuerst müssen einige Zahlen in der MAP.i3d gesucht und notiert werden (die 
     A-5. Suche die LETZTE Zahl bei 'distanceMapIds' von 'FoliageSubLayer name="rape"'. Notiere den Wert hier->
     A-6. Suche die LETZTE Zahl bei 'distanceMapIds' von 'FoliageSubLayer name="maize"'. Notiere den Wert hier->
 
-B.  Mit den gefundenen Zahlen ersetzt man nun einige Platzhalter in DIESER DATEI! Dazu verwendet man die Funktion "Suchen/Ersetzen" des Texteditors.
+B.  Mit den gefundenen Zahlen ersetzt man nun einige Platzhalter in DIESER DATEI (in der du gerade liest)! Dazu verwendet man die Funktion "Suchen/Ersetzen" des Texteditors.
     Hinweis: Es werden !!Platzhalter!! (inklusive der jeweils zwei Ausrufezeichen) mit einer einfachen Zahl, wie z.B. 43 (ohne irgendetwas sonst) ersetzt.
 
     B-1. Suche nach     !!WINDROWSHADERFILEID!!     und ersetze mit der Zahl aus A-1.
