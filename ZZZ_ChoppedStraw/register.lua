@@ -1,3 +1,4 @@
+-- Test lokal
 -- Chopped Straw
 -- Spec for chopped straw left on field
 -- by webalizer, www.planet-ls.de
