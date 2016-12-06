@@ -17,7 +17,7 @@ table.insert(getfenv(0)["modSoilModPlugins"], ChoppedStraw_Register)
 --
 ChoppedStraw_Register.initialized = false
 ChoppedStraw_Register.soilModPresent = false
--- Define implements
+-- Define implement
 ChoppedStraw_Register.csTYPE_UNKNOWN    = 0
 ChoppedStraw_Register.csTYPE_PLOUGH     = 2^0
 ChoppedStraw_Register.csTYPE_CULTIVATOR = 2^1
