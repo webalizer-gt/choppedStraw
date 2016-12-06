@@ -11,7 +11,7 @@ ChoppedStraw_Register = {};
 local modItem = ModsUtil.findModItemByModName(g_currentModName);
 ChoppedStraw_Register.version = (modItem and modItem.version) and modItem.version or "?.?.?";
 
--- Register ChoppedStraw for callback from SoilMod's plugin facility
+-- Register ChoppedStraw fo callback from SoilMod's plugin facility
 getfenv(0)["modSoilModPlugins"] = getfenv(0)["modSoilModPlugins"] or {}
 table.insert(getfenv(0)["modSoilModPlugins"], ChoppedStraw_Register)
 --
